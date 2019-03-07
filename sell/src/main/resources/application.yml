@@ -1,9 +1,9 @@
 spring:
-  jpa:
-    show-sql: true
   profiles:
     include: database
 
 server:
   servlet:
     context-path: /sell
+
+

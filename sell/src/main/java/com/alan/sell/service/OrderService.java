@@ -15,10 +15,10 @@ public interface OrderService {
 
     Page<OrderDTO> findList(String buyerOpenId, Pageable pageAble);
 
-    OrderDTO cancel(String orderId);
+    OrderDTO cancel(OrderDTO orderDTO);
 
-    OrderDTO finish(String orderId);
+    OrderDTO finish(OrderDTO orderDTO);
 
-    OrderDTO paid(String orderId);
+    OrderDTO paid(OrderDTO orderDTO);
 
 }

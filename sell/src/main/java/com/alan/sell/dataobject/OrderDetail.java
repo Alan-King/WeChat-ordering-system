@@ -1,7 +1,9 @@
 package com.alan.sell.dataobject;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.Entity;

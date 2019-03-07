@@ -1,8 +1,8 @@
-package com.alan.sell.viewobject;
+package com.alan.sell.vo;
 
+import com.alibaba.fastjson.annotation.JSONType;
 import lombok.Data;
-
-import java.util.List;
+import org.springframework.boot.jackson.JsonComponent;
 
 @Data
 public class ResultVO<T> {
@@ -18,6 +18,7 @@ public class ResultVO<T> {
         resultVO.setCode(0);
         resultVO.setMsg("成功");
         resultVO.setData(data);
+
         return resultVO;
     }
 
@@ -28,7 +29,7 @@ public class ResultVO<T> {
     public static ResultVO error(Integer code, String msg) {
         ResultVO resultVO = new ResultVO();
         resultVO.setCode(code);
-        resultVO.setMsg("msg");
+        resultVO.setMsg(msg);
         return resultVO;
     }
 }

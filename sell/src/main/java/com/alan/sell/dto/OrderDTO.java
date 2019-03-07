@@ -1,9 +1,10 @@
 package com.alan.sell.dto;
 
 import com.alan.sell.dataobject.OrderDetail;
-import com.alan.sell.enums.OrderStatusEnum;
-import com.alan.sell.enums.PayStatusEnum;
+import com.alan.sell.utils.Serializer.Date2LongSerializer;
+import com.alibaba.fastjson.annotation.JSONType;
 import lombok.Data;
+import org.springframework.boot.jackson.JsonComponent;
 
 import javax.persistence.Id;
 import java.math.BigDecimal;

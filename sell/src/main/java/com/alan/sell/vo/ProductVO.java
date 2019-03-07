@@ -1,6 +1,6 @@
-package com.alan.sell.viewobject;
+package com.alan.sell.vo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -8,14 +8,14 @@ import java.math.BigDecimal;
 @Data
 public class ProductVO {
 
-    @JsonProperty("id")
+    @JSONField(name = "id")
     private String productId;
-    @JsonProperty("name")
+    @JSONField(name ="name")
     private String productName;
-    @JsonProperty("price")
+    @JSONField(name ="price")
     private BigDecimal productPrice;
-    @JsonProperty("description")
+    @JSONField(name ="description")
     private String productDescription;
-    @JsonProperty("icon")
+    @JSONField(name ="icon")
     private String productIcon;
 }

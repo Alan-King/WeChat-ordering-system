@@ -4,17 +4,14 @@ import com.alan.sell.dataobject.ProductCategory;
 import com.alan.sell.dataobject.ProductInfo;
 import com.alan.sell.service.CategoryService;
 import com.alan.sell.service.ProductService;
-import com.alan.sell.viewobject.CategoryVO;
-import com.alan.sell.viewobject.ProductVO;
-import com.alan.sell.viewobject.ResultVO;
-import org.springframework.beans.BeanUtils;
+import com.alan.sell.vo.CategoryVO;
+import com.alan.sell.vo.ProductVO;
+import com.alan.sell.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
