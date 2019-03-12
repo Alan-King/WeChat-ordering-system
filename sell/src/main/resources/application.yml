@@ -1,6 +1,6 @@
 spring:
   profiles:
-    include: database
+    include: database,wechat
 
 server:
   servlet:

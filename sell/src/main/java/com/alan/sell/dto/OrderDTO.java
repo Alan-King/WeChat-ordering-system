@@ -3,6 +3,7 @@ package com.alan.sell.dto;
 import com.alan.sell.dataobject.OrderDetail;
 import com.alan.sell.utils.Serializer.Date2LongSerializer;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.springframework.boot.jackson.JsonComponent;
 
@@ -30,8 +31,10 @@ public class OrderDTO {
     //`pay_status` tinyint(3) NOT NULL DEFAULT '0' COMMENT '支付状态，默认0未支付',
     private Integer payStatus;
     //`create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date createTime;
     //`update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    @JsonSerialize(using = Date2LongSerializer.class)
     private Date updateTime;
 
     private List<OrderDetail> orderDetailList;

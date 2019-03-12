@@ -13,6 +13,7 @@ public enum ResultEnum {
     ORDER_STATUS_WRONG(50,"订单状态错误"),
     ORDER_FINNISH_FAIL(60,"完成订单失败"),
     PAY_STATUS_WRONG(70,"支付状态错误"),
+    WX_MP_ERROR(80,"微信公众号错误"),
 
     ;
 
