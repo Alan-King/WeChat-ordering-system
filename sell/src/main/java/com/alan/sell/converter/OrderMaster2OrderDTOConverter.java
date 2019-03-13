@@ -7,7 +7,7 @@ import org.springframework.beans.BeanUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OrderMaster2OrderDTO {
+public class OrderMaster2OrderDTOConverter {
 
     public static OrderDTO converter(OrderMaster orderMaster){
         OrderDTO orderDTO = new OrderDTO();

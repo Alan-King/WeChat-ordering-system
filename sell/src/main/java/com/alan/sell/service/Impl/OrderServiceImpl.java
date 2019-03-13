@@ -1,6 +1,6 @@
 package com.alan.sell.service.Impl;
 
-import com.alan.sell.converter.OrderMaster2OrderDTO;
+import com.alan.sell.converter.OrderMaster2OrderDTOConverter;
 import com.alan.sell.dataobject.OrderDetail;
 import com.alan.sell.dataobject.OrderMaster;
 import com.alan.sell.dataobject.ProductInfo;
@@ -13,6 +13,7 @@ import com.alan.sell.exception.SellException;
 import com.alan.sell.repository.OrderDetailRepository;
 import com.alan.sell.repository.OrderMasterRepository;
 import com.alan.sell.service.OrderService;
+import com.alan.sell.service.PayService;
 import com.alan.sell.service.ProductService;
 import com.alan.sell.utils.KeyUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,9 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMasterRepository orderMasterRepository;
     private final OrderDetailRepository orderDetailRepository;
     private final ProductService productService;
+
+    @Autowired
+    private PayService payService;
 
     @Autowired
     public OrderServiceImpl(OrderMasterRepository orderMasterRepository, OrderDetailRepository orderDetailRepository, ProductService productService) {
@@ -114,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderDTO> findList(String buyerOpenId, Pageable pageAble) {
 
         Page<OrderMaster> orderMasterPage = orderMasterRepository.findOrderListByBuyerOpenid(buyerOpenId, pageAble);
-        List<OrderDTO> orderDTOList = OrderMaster2OrderDTO.converterList(orderMasterPage.getContent());
+        List<OrderDTO> orderDTOList = OrderMaster2OrderDTOConverter.converterList(orderMasterPage.getContent());
 
       /*  for (OrderDTO orderDTO : orderDTOList) {
             List<OrderDetail> detailList = orderDetailRepository.findDetailListByOrderId(orderDTO.getOrderId());
@@ -152,7 +156,7 @@ public class OrderServiceImpl implements OrderService {
         //查看支付状态（返还已支付钱）
         Integer payStatus = orderMaster.getPayStatus();
         if (payStatus.equals(PayStatusEnum.SUCCESS.getCode())) {
-            //todo  退款
+            payService.refund(orderDTO);
         }
 
         return orderDTO;
@@ -204,7 +208,6 @@ public class OrderServiceImpl implements OrderService {
             log.error("【支付订单】订单中无商品详情 {}", orderDTO);
             throw new SellException(ResultEnum.ORDER_DETAIL_NOT_EXIST);
         }
-        //TODO 支付
 
         orderDTO.setPayStatus(PayStatusEnum.SUCCESS.getCode());
         OrderMaster orderMaster = new OrderMaster();

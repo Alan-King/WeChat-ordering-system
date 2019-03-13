@@ -34,7 +34,7 @@ public class WechatController {
                 URLEncoder.encode(returnUrl));
         log.info("【微信网页获取授权】获取code，redirectUrl = {}", redirectUrl);
 
-        return "redirect:" + redirectUrl;
+        return "redirect:" + returnUrl;
 
     }
 

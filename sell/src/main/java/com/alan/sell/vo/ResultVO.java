@@ -13,6 +13,17 @@ public class ResultVO<T> {
 
     private T data;
 
+    public ResultVO successWithNull() {
+        return successWithData(null);
+    }
+
+    public ResultVO<T> successWithData(T data) {
+        setCode(0);
+        setMsg("成功");
+        setData(data);
+        return this;
+    }
+
     public static ResultVO success(Object data) {
         ResultVO resultVO = new ResultVO();
         resultVO.setCode(0);

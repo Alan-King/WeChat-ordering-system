@@ -1,3 +1,7 @@
 wechat:
   mAppId: wx43ea4dc787f511f3
   mAppSecret: 4f242a90491a46b493e98d706a3d04e2
+  mchId: 123456
+  mchKey: asdasjhjbasFFgASD
+  keyPath: var/keypath/123.txt
+  notifyUrl: http://wlzhfn.natapp1.cc/sell/pay/notify

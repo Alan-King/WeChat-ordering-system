@@ -10,4 +10,9 @@ import org.springframework.stereotype.Component;
 public class WechatAccountCongig {
     private String mAppid;
     private String mAppSecret;
+    private String mchId;
+    private String mchKey;
+    private String keyPath;
+    private String notifyUrl;
+
 }

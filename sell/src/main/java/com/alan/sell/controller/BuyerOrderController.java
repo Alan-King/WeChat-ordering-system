@@ -8,12 +8,6 @@ import com.alan.sell.exception.SellException;
 import com.alan.sell.form.OrderForm;
 import com.alan.sell.service.OrderService;
 import com.alan.sell.vo.ResultVO;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.annotation.JSONCreator;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.annotation.JSONType;
-import com.alibaba.fastjson.parser.Feature;
-import com.alibaba.fastjson.support.spring.annotation.ResponseJSONP;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jackson.JsonComponent;
@@ -39,7 +33,7 @@ public class BuyerOrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public ResultVO<Map<String, String>> create( OrderForm orderForm, BindingResult bindingResult) {
+    public ResultVO<Map<String, String>> create(OrderForm orderForm, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             log.error("订单参数不正确,orderForm={}", orderForm);
@@ -47,18 +41,14 @@ public class BuyerOrderController {
                     bindingResult.getFieldError().getDefaultMessage());
         }
         OrderDTO orderDTO = OrderForm2OrderDTOConverter.convert(orderForm);
+        ResultVO<Map<String, String>> resultVO = new ResultVO<>();
 
-        ResultVO resultVO = null;
-        try {
-            String orderId = orderService.create(orderDTO).getOrderId();
-            Map<String, String> map = new HashMap<>();
+        String orderId = orderService.create(orderDTO).getOrderId();
+        Map<String, String> map = new HashMap<>();
 
-            map.put("orderId", orderId);
-            resultVO = ResultVO.success(map);
-        } catch (SellException se) {
-            resultVO = ResultVO.error(se.getCode(), se.getMessage());
-        }
-        return resultVO;
+        map.put("orderId", orderId);
+
+        return resultVO.successWithData(map);
     }
 
     @RequestMapping("/list")
@@ -70,16 +60,10 @@ public class BuyerOrderController {
             log.error("【查询订单列表】openid为空");
             throw new SellException(ResultEnum.PARAM_ERROR);
         }
-        ResultVO<List<OrderDTO>> resultVO;
-        try {
-            Page<OrderDTO> orderDTOPage = orderService.findList(openid, PageRequest.of(page, size));
-            resultVO = ResultVO.success(orderDTOPage.getContent());
-        } catch (SellException se) {
-            log.error("【查询订单列表】错误 {}", se);
-            resultVO = ResultVO.error(se.getCode(), se.getMessage());
-//            JSONObject requestBody = JSONObject.parseObject(requestWrapper.getBody(), Feature.OrderedField);
-        }
-        return resultVO;
+
+        Page<OrderDTO> orderDTOPage = orderService.findList(openid, PageRequest.of(page, size));
+
+        return new ResultVO<List<OrderDTO>>().successWithData(orderDTOPage.getContent());
     }
 
     @RequestMapping("/detail")
@@ -88,19 +72,12 @@ public class BuyerOrderController {
         if (openid == null || orderId == null || openid.equals("") || orderId.equals("")) {
             throw new SellException(ResultEnum.PARAM_ERROR);
         }
-        ResultVO<OrderDTO> resultVO;
-        try {
-            OrderDTO orderDTO = orderService.findOne(orderId);
+        OrderDTO orderDTO = orderService.findOne(orderId);
 
-            if (!openid.equals(orderDTO.getBuyerOpenid())) {
-                throw new SellException(ResultEnum.PARAM_ERROR);
-            }
-            resultVO = ResultVO.success(orderDTO);
-        } catch (SellException se) {
-            resultVO = ResultVO.error(se.getCode(), se.getMessage());
+        if (!openid.equals(orderDTO.getBuyerOpenid())) {
+            throw new SellException(ResultEnum.PARAM_ERROR);
         }
-
-        return resultVO;
+        return new ResultVO<OrderDTO>().successWithData(orderDTO);
     }
 
     @RequestMapping("/cancel")
@@ -110,14 +87,10 @@ public class BuyerOrderController {
         if (openid.equals("") || orderId.equals("")) {
             throw new SellException(ResultEnum.PARAM_ERROR);
         }
-        try {
-            OrderDTO orderDTO = orderService.findOne(orderId);
-            orderService.cancel(orderDTO);
-            resultVO = ResultVO.success();
-        } catch (SellException se) {
-            resultVO = ResultVO.error(se.getCode(), se.getMessage());
-        }
-        return resultVO;
+        OrderDTO orderDTO = orderService.findOne(orderId);
+        orderService.cancel(orderDTO);
+
+        return ResultVO.success();
     }
 }
 
