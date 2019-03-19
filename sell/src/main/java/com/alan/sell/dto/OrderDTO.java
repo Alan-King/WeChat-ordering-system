@@ -1,8 +1,12 @@
 package com.alan.sell.dto;
 
 import com.alan.sell.dataobject.OrderDetail;
+import com.alan.sell.enums.OrderStatusEnum;
+import com.alan.sell.enums.PayStatusEnum;
+import com.alan.sell.utils.EnumUtils;
 import com.alan.sell.utils.Serializer.Date2LongSerializer;
 import com.alibaba.fastjson.annotation.JSONType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.springframework.boot.jackson.JsonComponent;
@@ -38,5 +42,15 @@ public class OrderDTO {
     private Date updateTime;
 
     private List<OrderDetail> orderDetailList;
+
+    @JsonIgnore
+    public PayStatusEnum getPayStatusEnum(){
+        return EnumUtils.getByCode(payStatus, PayStatusEnum.class);
+    }
+
+    @JsonIgnore
+    public OrderStatusEnum getOrderStatusEnum(){
+        return EnumUtils.getByCode(orderStatus, OrderStatusEnum.class);
+    }
 
 }

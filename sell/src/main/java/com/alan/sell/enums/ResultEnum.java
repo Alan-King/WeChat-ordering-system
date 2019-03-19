@@ -4,10 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum ResultEnum {
-
+    SUCCESS(0, "成功"),
     SYSTEM_ERROR(-1, "系统异常"),
     PARAM_ERROR(1,"参数不正确"),
     PRODUCT_NOT_EXIST(10,"商品不存在"),
+    PRODUCT_STATUS_ERROR(11,"商品状态错误"),
     PRODUCT_STOCK_NOT_ENOUGH(20,"商品库存不足"),
     ORDER_NOT_EXIST(30,"订单不存在"),
     ORDER_DETAIL_NOT_EXIST(40,"订单详情不存在"),
