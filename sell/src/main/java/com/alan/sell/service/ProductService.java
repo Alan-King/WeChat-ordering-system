@@ -19,6 +19,10 @@ public interface ProductService {
 
     //新增和更新
     ProductInfo save(ProductInfo productInfo);
+    //上架
+    ProductInfo onSale(String productId);
+    //下架
+    ProductInfo offSale(String productId);
 
     //加库存
     void increaseStock(List<CartDTO> cartDTOList);

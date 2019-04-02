@@ -19,40 +19,65 @@ import java.util.List;
 public class ProductInfoServiceImpl implements ProductService {
 
     @Autowired
-    private ProductInfoRepository repository;
+    private ProductInfoRepository productInfoRepository;
 
     @Override
     public ProductInfo findOneById(String id) {
-        return repository.findById(id).get();
+        try {
+            return productInfoRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+        }
     }
 
     @Override
     public List<ProductInfo> findUpAll() {
-        return repository.findByProductStatus(ProductStatusEnum.UP.getCode());
+        return productInfoRepository.findByProductStatus(ProductStatusEnum.UP.getCode());
     }
 
     @Override
     public Page<ProductInfo> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+        return productInfoRepository.findAll(pageable);
     }
 
     @Override
     public ProductInfo save(ProductInfo productInfo) {
-        return repository.save(productInfo);
+        return productInfoRepository.save(productInfo);
+    }
+
+    @Override
+    public ProductInfo onSale(String productId) {
+        ProductInfo productInfo = findOneById(productId);
+
+        if (productInfo.getProductStatusEnum().equals(ProductStatusEnum.UP)) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.UP.getCode());
+        return productInfoRepository.save(productInfo);
+    }
+
+    @Override
+    public ProductInfo offSale(String productId) {
+        ProductInfo productInfo = findOneById(productId);
+        if (productInfo.getProductStatusEnum().equals(ProductStatusEnum.DOWN)) {
+            throw new SellException(ResultEnum.PRODUCT_STATUS_ERROR);
+        }
+        productInfo.setProductStatus(ProductStatusEnum.DOWN.getCode());
+        return productInfoRepository.save(productInfo);
     }
 
     @Override
     @Transactional
     public void increaseStock(List<CartDTO> cartDTOList) {
         for (CartDTO cartDTO : cartDTOList) {
-            ProductInfo productInfo = repository.findById(cartDTO.getProductId()).get();
+            ProductInfo productInfo = productInfoRepository.findById(cartDTO.getProductId()).get();
             if (productInfo == null) {
                 throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }
             Integer newStock = productInfo.getProductStock() + cartDTO.getProductQuantity();
 
             productInfo.setProductStock(newStock);
-            repository.save(productInfo);
+            productInfoRepository.save(productInfo);
         }
     }
 
@@ -60,7 +85,7 @@ public class ProductInfoServiceImpl implements ProductService {
     @Transactional
     public void decreaseStock(List<CartDTO> cartDTOList) {
         for (CartDTO cartDTO : cartDTOList) {
-            ProductInfo productInfo = repository.findById(cartDTO.getProductId()).get();
+            ProductInfo productInfo = productInfoRepository.findById(cartDTO.getProductId()).get();
             if (productInfo == null) {
                 throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }
@@ -69,7 +94,7 @@ public class ProductInfoServiceImpl implements ProductService {
                 throw new SellException(ResultEnum.PRODUCT_STOCK_NOT_ENOUGH);
             }
             productInfo.setProductStock(newStock);
-            repository.save(productInfo);
+            productInfoRepository.save(productInfo);
         }
     }
 }

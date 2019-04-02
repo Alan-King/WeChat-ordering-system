@@ -1,5 +1,8 @@
 package com.alan.sell.dataobject;
 
+import com.alan.sell.enums.ProductStatusEnum;
+import com.alan.sell.utils.EnumUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -44,5 +47,10 @@ public class ProductInfo {
     private Integer productStatus = 0;
     //`category_type` int(11) NOT NULL COMMENT '类目编号',
     private Integer categoryType;
+
+    @JsonIgnore
+    public ProductStatusEnum getProductStatusEnum(){
+        return EnumUtils.getByCode(productStatus, ProductStatusEnum.class);
+    }
 
 }

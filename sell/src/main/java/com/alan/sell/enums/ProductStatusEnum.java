@@ -3,7 +3,7 @@ package com.alan.sell.enums;
 import lombok.Getter;
 
 @Getter
-public enum ProductStatusEnum {
+public enum ProductStatusEnum implements EnumCode{
 
     UP(0,"在架状态"),
     DOWN(1,"下架状态"),
