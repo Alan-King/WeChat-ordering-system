@@ -3,7 +3,7 @@
 <#include "../common/header.ftl" >
 
 <body>
-<div id ="wrapper" class="toggled">
+<div id="wrapper" class="toggled">
     <#--边栏 ，sidebar-->
     <#include "../common/nav.ftl">
 
@@ -65,7 +65,9 @@
                             <#if pageIndex==currentPage>
                                 <li class="disabled"><a href="#">${pageIndex}</a></li>
                             <#else>
-                                <li><a href="/sell/seller/order/list?page=${pageIndex}&size=${pageSize}">${pageIndex}</a></li>
+                                <li>
+                                    <a href="/sell/seller/order/list?page=${pageIndex}&size=${pageSize}">${pageIndex}</a>
+                                </li>
                             </#if>
 
                         </#list>
@@ -82,12 +84,68 @@
 
 </div>
 
+<#--弹窗-->
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">
+                    提醒
+                </h4>
+            </div>
+            <div class="modal-body">
+                你有新的订单
+            </div>
+            <div class="modal-footer">
+                <button  onclick="javascript:document.getElementById('notice').pause()" type="button" class="btn
+                btn-default" data-dismiss="modal">关闭</button>
+                <button onclick="location.reload()" type="button" class="btn btn-primary">查看新订单</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<#--音乐播放-->
+<audio id="notice">
+    <source src="/sell/mp3/song.mp3" type="audio/mpeg">
+</audio>
+
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+
+<script src="https://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script>
+    var webSocket = null;
+    if ('WebSocket' in window) {
+        webSocket = new WebSocket('ws://wlzhfn.natapp1.cc/sell/webSocket');
+    } else {
+        window.alert('浏览器不支持webSocket');
+    }
+
+    webSocket.onopen = function (event) {
+        console.log('建立连接');
+    };
+
+    webSocket.onclose = function (event) {
+        console.log('关闭连接');
+    };
+
+    webSocket.onmessage = function (event) {
+        console.log('收到消息:' + event.data);
+        //弹窗提醒播放音乐
+        $('#myModal').modal('show');
+        document.getElementById('notice').play();
+    };
+
+    webSocket.onerror = function (event) {
+        alert('webSocket发生错误！');
+    };
+
+    window.onbeforeunload = function (ev) {
+        webSocket.close();
+    };
+</script>
 
 </body>
 </html>
-
-<#--
-<#list orderDTOPage.content as orderDTO>
-    ${orderDTO.}
-
-</#list>-->

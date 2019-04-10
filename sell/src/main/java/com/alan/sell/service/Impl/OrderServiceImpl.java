@@ -15,6 +15,7 @@ import com.alan.sell.repository.OrderMasterRepository;
 import com.alan.sell.service.OrderService;
 import com.alan.sell.service.PayService;
 import com.alan.sell.service.ProductService;
+import com.alan.sell.service.WebSocketService;
 import com.alan.sell.utils.KeyUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +42,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private PayService payService;
+
+    @Autowired
+    WebSocketService webSocketService;
 
     @Autowired
     public OrderServiceImpl(OrderMasterRepository orderMasterRepository, OrderDetailRepository orderDetailRepository, ProductService productService) {
@@ -75,7 +79,6 @@ public class OrderServiceImpl implements OrderService {
             orderDetailRepository.save(orderDetail);
         }
 
-
         //OrderMaster写入数据库
         orderDTO.setOrderId(orderId);
         orderDTO.setOrderAmount(amount);
@@ -92,6 +95,10 @@ public class OrderServiceImpl implements OrderService {
                 .map(e -> new CartDTO(e.getProductId(), e.getProductQuantity()))
                 .collect(Collectors.toList());
         productService.decreaseStock(cartDtoList);
+
+        //WebSocket发送消息
+        webSocketService.sendMessage(orderId);
+
         return orderDTO;
     }
 

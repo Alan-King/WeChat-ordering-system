@@ -1,8 +1,6 @@
 package com.alan.sell.vo;
 
-import com.alibaba.fastjson.annotation.JSONType;
 import lombok.Data;
-import org.springframework.boot.jackson.JsonComponent;
 
 @Data
 public class ResultVO<T> {
